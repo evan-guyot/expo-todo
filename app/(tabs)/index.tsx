@@ -1,10 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 import Icon from "@expo/vector-icons/FontAwesome6";
 import { Task } from "@/lib/interfaces/task";
-import { tasks } from "@/lib/data/task";
+import { getAllTasks } from "@/lib/functions/database/task";
+import { useSQLiteContext } from "expo-sqlite";
 
 export default function TaskScreen() {
+  const db = useSQLiteContext();
+  const [tasks, setTasks] = useState<Task[]>();
+
+  useEffect(() => {
+    const loadTasks = async () => {
+      const result = await getAllTasks(db);
+      setTasks(result);
+    };
+
+    loadTasks();
+  }, []);
+
   const renderItem = ({ item }: { item: Task }) => (
     <View style={styles.taskContainer}>
       <Text style={styles.taskTitle}>{item.title}</Text>

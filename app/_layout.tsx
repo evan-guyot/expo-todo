@@ -1,6 +1,9 @@
+import { databaseName } from "@/lib/data/database";
+import { initDatabase } from "@/lib/functions/database";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { SQLiteProvider } from "expo-sqlite";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
@@ -23,9 +26,11 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="+not-found" />
-    </Stack>
+    <SQLiteProvider databaseName={databaseName} onInit={initDatabase}>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="+not-found" />
+      </Stack>
+    </SQLiteProvider>
   );
 }
